@@ -1,0 +1,124 @@
+
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=15mm,bmargin=30mm,lmargin=30mm,rmargin=20mm}
+%\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage{lipsum}
+\usepackage{nomencl}
+\makenomenclature
+\usepackage{bibentry}
+\usepackage{subfig}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{gensymb}
+\usepackage{refstyle}
+\usepackage{setspace}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\graphicspath{ {images/} }
+\onehalfspacing
+
+\makeatletter
+
+\linespread{2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\newcommand{\LyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\spacefactor1000}
+
+\makeatother
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{0.7cm}
+{\centering     
+\large
+{\Large\bf Compressed Sensing in Internet of Things}\\
+\vspace{3cm}
+\bf{Seminar Report}\\
+\vspace{0.25cm}
+\vspace{0.1cm}
+\it
+by \\
+\vspace{.5cm}
+\rm
+{\large \bf {Nagma Samreen Khan}}\\
+{\large \bf {153079030}}
+
+\vspace{1cm}
+
+{\it{under the guidance of}} \\
+\vspace{.5cm}
+
+\hspace{.05cm} {\large \bf {Prof. Kumar Appaiah}}\\
+%\hspace{.05cm}
+\vspace {0.5cm}
+%\iitbseal\ \\
+
+\begin{figure}[h] 
+%\hspace{6cm}
+%\vspace{5cm}
+{\centering {\includegraphics[width=0.32\textwidth]{images/IITB_logo}}\par}
+\end{figure} 
+
+Department of Electrical Engineering \\ 
+Indian Institute of Technology, Bombay\\ 
+{\centering
+\hspace{6.5cm}April 2016} 
+}
+\pagebreak 
+\end{titlepage}
+
+\begin{abstract}
+The abstract goes here.
+\end{abstract}
+\section{Introduction}
+  \subsection{Internet of Things}
+  Internet of Things or commonly referred to as IoT defines a paradigm in which 'everyday' devices can be connected 
+  together in a network and thus can communicate with each other over the Internet. Moreover the connected devices are equipped 
+  with 'identifying', 'sensing' and 'processing' \cite{Whitmore-survey}
+  capabilites which enable them to 
+  acheive some objective or complete some assigned task. Nowadays IoT is widely used in applications like
+  healthcare, utilities, transport, etc. The revolution in the field of IoT has enabled
+  these devices to have interaction capabilites too i.e. they can be controlled, actuated and commanded.
+  \cite{Gubbi-vision}. 
+  \par The components of IoT broadly are Hardware, Software and Architecture. Hardware refers to the component/s
+  or the device/s which constitue the system which has been designed to acheive some objective, Software refers roughly
+  to the support which enables the devices in the system to exchange and process data inspite of their heterogeniety 
+   %\cite{Whitmore-survey}
+   and Architecture provides the specifications so that information transfer and processing
+   and networking of devices can be done in a standard fashion  \cite{Whitmore-survey} \cite{Gubbi-vision}.
+  \par In healthcare applications, IoT can be used to monitor a patient's health condtion over the Internet, and 
+  in case of critical patients the sensors placed on the patient can transmit and make information available continuously
+  to the doctors and patient's relatives which will lead to better monitoring and enable doctors to take timely action
+  in case of emergencies. IoT has already made its mark in making 'smart homes' where sensors and actuators placed in 
+  the house or building complex continuously monitor and control the resource consumption and also fulfil security needs.
+  On a broader scale, IoT can be deployed to make 'smart cities' in which everything starting from traffic to the levels 
+  of pollution can be monitored and controlled \cite{Whitmore-survey}. 
+  \par Even in the industries IoT can be used for quality management and tracking of goods, say using Radio Frequency
+  Identification( RFID ). In can be used in hazardous industries, say the mining industry, to improve the safety level
+  by monitoring the condition inside the mine via sensors and continuously process the data and .
+  \subsection{Compressed Sensing}
+
+\section{Conclusion}
+The conclusion goes here.
+
+The authors would like to thank...\cite{Whitmore-survey} \cite{Huang-DGS}
+
+
+
+\bibliographystyle{plain}
+\bibliography{seminar_report}
+
+
+\end{document}
+
+
