@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{amsmath}
@@ -16,12 +17,13 @@
 \makenomenclature
 \usepackage{bibentry}
 \usepackage{subfig}
-\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{gensymb}
 \usepackage{refstyle}
 \usepackage{setspace}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 \graphicspath{ {images/} }
@@ -103,11 +105,41 @@ The abstract goes here.
   the house or building complex continuously monitor and control the resource consumption and also fulfil security needs.
   On a broader scale, IoT can be deployed to make 'smart cities' in which everything starting from traffic to the levels 
   of pollution can be monitored and controlled \cite{Whitmore-survey}. 
-  \par Even in the industries IoT can be used for quality management and tracking of goods, say using Radio Frequency
-  Identification( RFID ). In can be used in hazardous industries, say the mining industry, to improve the safety level
-  by monitoring the condition inside the mine via sensors and continuously process the data and .
+  \par Even in the industries IoT can be used for quality management, improving efficiency and tracking of goods. 
+  In can be used in hazardous industries, say the mining industry, to improve the safety level
+  by monitoring the condition inside the mine via sensors and continuously process the data to provide better disaster
+  management and in-time warning systems. In transportation and logistics, the monitoring of movement of goods, say 
+  using Radio Frequency Identification( RFID ) can be 
+  made 'real-time' using IoT and thus providing better tracking \cite{Gubbi-vision}.
+  \par These are just some examples of how IoT has affeced, is affecting and will affect our lives but one thing is clear
+  that in the coming years IoT will lead to further betterment  in our lives through saving our time, money and resources.
   \subsection{Compressed Sensing}
-
+  With increase in the number of connected devices around us, the amount of data transmitted over the Internet will naturally
+  increase. Also with increase in the number of sensors, large amounts of data will be generated which will have to be 
+  processed, stored and transmitted over the Internet in a timely fashion. So consumption of resources by the entire system
+  will increase. This is where Compressed or Compressive Sensing comes in. 
+  \par The simplest way to define Compressed Sensing is that we transmit much less information compared to what has been
+  measured by our sensors and the actual measured information can be reconstructed with a small error at the receiver's end.
+  This opens up a world of possibilities as it leads to saving time and resources and thus data transmission can be done
+  much faster. The only prerequisite is that the data has to \textit{sparse} or \textit{compressible}
+  in some transform domain. These concepts
+  are defined mathematically in the next section, but here an example is presented to give a flavour of Compressed Sensing.
+  Say we want to measure temperature at every point in a large room and for that purpose say we deploy 100 sensors distributed
+  uniformly across the room. Now we know that temperature is a slowly varying quantity and thus will have mainly low
+  frequency components. So if we take the Fourier Transform of the data then we can ignore the higher frequency coefficients
+  and thus the measurements are compressible in Fourier Transform domain.
+ 
+\section{Mathematical Background to Compressed Sensing}
+\begin{defn}
+ A vector $\theta$ $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} non-zero coefficients in $\theta$.
+\end{defn}
+\begin{defn}
+ A vector $\theta$ $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if there are \textit{k} non-zero coefficients in $\theta$.
+\end{defn}
+Suppose \textit{x}$\in$ $\mathbb{R}^n$ is original data measured by the sensors which is known to be \textit{sparse} or 
+\textit{compressible}
+\section{Recovery Algorithms}
+\section{Verification of Recovery Algorithms through Simulation}
 \section{Conclusion}
 The conclusion goes here.
 
