@@ -22,13 +22,19 @@
 \usepackage{gensymb}
 \usepackage{refstyle}
 \usepackage{setspace}
+\usepackage{notoccite} %for sorting references
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}[section]
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 \graphicspath{ {images/} }
 \onehalfspacing
-
+\def\compressible{\textit{compressible}\hspace{0.1in}}
+\def\sparse{\textit{sparse}\hspace{0.1in}}
+\def\ksparse{\textit{k-sparse}\hspace{0.1in}}
+\def\measurement{\textit{measurement}\hspace{0.1in}}
+\def\x{\textit{x}\hspace{0.1in}}
+\def\y{\textit{y}\hspace{0.1in}}
 \makeatletter
 
 \linespread{2}
@@ -118,8 +124,9 @@ The abstract goes here.
   increase. Also with increase in the number of sensors, large amounts of data will be generated which will have to be 
   processed, stored and transmitted over the Internet in a timely fashion. So consumption of resources by the entire system
   will increase. This is where Compressed or Compressive Sensing comes in. 
-  \par The simplest way to define Compressed Sensing is that we transmit much less information compared to what has been
-  measured by our sensors and the actual measured information can be reconstructed with a small error at the receiver's end.
+  \par The simplest way to define Compressed Sensing is that we measure and transmit much less information i.e, \y 
+  compared to what would have been actually measured by the sensors i.e, say \x and also \x can be reconstructed with a 
+  small error at the receiver's end.
   This opens up a world of possibilities as it leads to saving time and resources and thus data transmission can be done
   much faster. The only prerequisite is that the data has to \textit{sparse} or \textit{compressible}
   in some transform domain. These concepts
@@ -131,14 +138,52 @@ The abstract goes here.
  
 \section{Mathematical Background to Compressed Sensing}
 \begin{defn}
- A vector $\theta$ $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} non-zero coefficients in $\theta$.
+ A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} non-zero coefficients in \textit{x}.
 \end{defn}
 \begin{defn}
- A vector $\theta$ $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if there are \textit{k} non-zero coefficients in $\theta$.
+ A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
+ \textit{k}-term \sparse approximation \textit{z} i.e. $\sigma_k$ is small where \cite{CS_book},
+ \begin{equation}
+%  \sigma_k = \inf_{\norm{z_0}_0 \leq k}
+\sigma_k = \inf_{\|z_0\|_0 \leq k} \| x - z \|_p
+\end{equation}
 \end{defn}
-Suppose \textit{x}$\in$ $\mathbb{R}^n$ is original data measured by the sensors which is known to be \textit{sparse} or 
-\textit{compressible}
+In this discussion we are assuming that \textit{x} is \sparse or \compressible in its original domain and no transform
+is needed. We can make this assumption without loss of generalisation because any signal in $\mathbb{R}^n$ can be 
+represented in terms on an basis matrix( assumed orthonormal ), say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
+\begin{equation}
+ x = \sum_{i=1}^{n} s_i \psi_i = \textbf{s} \psi 
+\end{equation}
+where \textit{s} $\in \mathbb{R}^n$. So \x and \textit{s} are considered equivalent \cite{Baraniuk-CS}. Also whenever
+a vector is mentioned as \ksparse then either it actually is or it is \compressible and can be well approximated 
+by its \ksparse representation.
+
+\par Now suppose \textit{x}$\in$ $\mathbb{R}^n$ is the original data measured by the sensors and 
+is known to be \ksparse then we don't measure \x directly but instead measure \y$\in$ $\mathbb{R}^m$, $m << n$ where,
+\begin{equation}
+ y = \phi x
+\end{equation}
+where $\phi$ is $m\times n$ matrix, called the \measurement matrix, and is required to satisfy the \textit{restricted
+isometry property}( RIP)( see Def. ~\ref{def:RIP} ) and also it is required to be \textit{incoherent} with the basis matrix $\psi$ 
+i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Baraniuk-CS}.
+\begin{defn}
+ For RIP to hold for any matrix $\phi$, the property states that for any vector $\theta$ having the 
+ same \textit{k} non-zero entries as \textit{x}
+ and for any $\epsilon$>0, the following must hold,
+ \begin{equation}
+  1 - \epsilon \leq \frac{\|\phi\hspace{0.1in}\theta\|_2}{\|\theta\|_2} \leq 1 + \epsilon
+ \end{equation}
+ \label{def:RIP}
+  \end{defn}
+ \par It has been shown that a $m \times n$ matrix $\phi$ having iid entries from a Gaussian distribution
+  possesess \textit{RIP} with high probability if $m \geq c\hspace{0.1in}log(\frac{n}{k})$, 
+ where \textit{c} is small constant \cite{Baraniuk-CS}.
+
 \section{Recovery Algorithms}
+Given a measurement vector \y $\in \mathbb{R}^m$, reconstructing the original \ksparse vector \x $\in \mathbb{R}^n$
+requires searching over all $\binom{n}{k}$ subspaces. As $m << n$, there can be many vectors \textit{x'} satisfying
+$\phi x'=y$, as we can have $x'=x+r$ where r belongs to null space of $\phi$.
+%Discuss CoSaMP and DGS
 \section{Verification of Recovery Algorithms through Simulation}
 \section{Conclusion}
 The conclusion goes here.
@@ -147,7 +192,7 @@ The authors would like to thank...\cite{Whitmore-survey} \cite{Huang-DGS}
 
 
 
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}%to make references appear in order of reference
 \bibliography{seminar_report}
 
 
