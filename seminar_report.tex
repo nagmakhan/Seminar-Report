@@ -23,6 +23,10 @@
 \usepackage{refstyle}
 \usepackage{setspace}
 \usepackage{notoccite} %for sorting references
+\usepackage{algorithm}
+\usepackage{algorithmc}
+\usepackage{program}
+\usepackage{algpseudocode}
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}[section]
 \setcounter{secnumdepth}{5}
@@ -155,7 +159,7 @@ The abstract goes here.
 \begin{defn}
  Support of a sparse vector \x i.e. $supp(x)$ is defined as,
  \begin{equation}
-  supp(x)={i|x(i) \neq 0}
+  supp(x)=\{i|x(i) \neq 0\}
  \end{equation}
  Note that for \ksparse signals $\|supp(x)\|_0 \leq k$.
 \end{defn}
@@ -204,7 +208,7 @@ i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Ba
  where \textit{c} is small constant \cite{Baraniuk-CS}.
 
 \section{Recovery Algorithms}
-Given a measurement vector \y $\in \mathbb{R}^m$, reconstructing the original \ksparse vector \x $\in \mathbb{R}^n$
+Given a measurement vector \y $\in \mathbb{R}^m$, which may be noisy, reconstructing the original \ksparse vector \x $\in \mathbb{R}^n$
 requires searching over all $\binom{n}{k}$ subspaces. The challenge for the recovery algorithms is to identify 
 which $k$ columns of $\phi$ span the subspace in which \y lies \cite{Dai-subspace}.
 %As $m << n$, $\phi$ is spanning only \textit{m} dimensions,
@@ -217,7 +221,7 @@ On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \t
 Matching Pursuit} algorithm or commonly known as \cosamp.
 
 \subsubsection{Notation}
-Before giving the mathematical background of \cosamp, certain notations have to be introduced.
+Before giving the mathematical background of \cosamp, certain notations have to be introduced \cite{Needell-CoSaMP}.
 \begin{enumerate}
   \item For $x \in \mathbb{R}^n$ and $k$ a positive integer, $x_k$ implies retaining only the $k$ largest
 values of \x and setting the rest equal to zero.
@@ -226,15 +230,52 @@ values of \x and setting the rest equal to zero.
   are chosen as per the values in set $T$.
   
   \item Pseudo-inverse of a matrix $A$ is defined as, 
-  \item For $T \subseteq {1,2,...n}$,
   \begin{equation}
-   x|_T = {x_i| i \in T}
+   A^\dagger= (A^\ast A)^{-1} A^\ast
+  \end{equation}
+
+  \item For $T \subseteq {1,2,...n}$, $x|_T$ is the restriction of \x to the set $T$, i.e. 
+  \begin{equation}
+   x|_T = 
+   \begin{cases}
+    x_i, & \text{if} \ i \in T\\
+    0, & otherwise.
+   \end{cases}
   \end{equation}
 
 \end{enumerate}
 
+\subsubsection{Algorithm Description}
+The \cosamp algorithm is described as below:
+\begin{enumerate}
+ \item \textbf{Initialisation}:
+ \begin{eqnarray}
+  x^0 = 0 \\
+  y_r = y \\
+  i = 0 \\
+ \end{eqnarray}
+  where $x^i$ holds the approximation to \x at the \textit{i}-th iteration and $y_r$ is the \textit{residual}.
+  
+  \item Repeat these steps until \textbf{halting critereon} is true.
+  \begin{enumerate}
+   \item Form a proxy of \textit{residual} and then make it $2k$\sparse.
+   \begin{eqnarray}
+    x_{temp} = \phi^\ast y_r = \phi^\ast \phi x \\
+    \Omega = supp(x_{temp \ 2k})
+   \end{eqnarray}
+   
+  \item Merge supports $\Omega$ and supp($x^{i-1}$) for the \textit{i}-th iteration
+  \begin{equation}
+   T = \Omega \cup supp(x^{i-1})
+  \end{equation}
 
-%Discuss CoSaMP and DGS
+  \item Solve a least squares problem to estimate \x, on the merged support.
+  
+  \end{enumerate}
+  
+\end{enumerate}
+
+%Discuss DGS
 \section{Verification of Recovery Algorithms through Simulation}
 \section{Conclusion}
 The conclusion goes here.
