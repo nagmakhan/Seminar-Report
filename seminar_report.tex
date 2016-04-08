@@ -33,8 +33,9 @@
 \def\sparse{\textit{sparse}\hspace{0.1in}}
 \def\ksparse{\textit{k-sparse}\hspace{0.1in}}
 \def\measurement{\textit{measurement}\hspace{0.1in}}
-\def\x{\textit{x}\hspace{0.1in}}
-\def\y{\textit{y}\hspace{0.1in}}
+\def\x{$x$\hspace{0.1in}}
+\def\y{$y$\hspace{0.1in}}
+\def\cosamp{\textbf{CoSaMP}\hspace{0.1in}}
 \makeatletter
 
 \linespread{2}
@@ -138,8 +139,10 @@ The abstract goes here.
  
 \section{Mathematical Background to Compressed Sensing}
 \begin{defn}
- A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} non-zero coefficients in \textit{x}.
+ A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} 
+ non-zero coefficients in \textit{x}.
 \end{defn}
+
 \begin{defn}
  A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
  \textit{k}-term \sparse approximation \textit{z} i.e. $\sigma_k$ is small where \cite{CS_book},
@@ -148,9 +151,18 @@ The abstract goes here.
 \sigma_k = \inf_{\|z_0\|_0 \leq k} \| x - z \|_p
 \end{equation}
 \end{defn}
+
+\begin{defn}
+ Support of a sparse vector \x i.e. $supp(x)$ is defined as,
+ \begin{equation}
+  supp(x)={i|x(i) \neq 0}
+ \end{equation}
+ Note that for \ksparse signals $\|supp(x)\|_0 \leq k$.
+\end{defn}
+
 In this discussion we are assuming that \textit{x} is \sparse or \compressible in its original domain and no transform
 is needed. We can make this assumption without loss of generalisation because any signal in $\mathbb{R}^n$ can be 
-represented in terms on an basis matrix( assumed orthonormal ), say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
+represented in terms on a basis matrix( assumed orthonormal ), say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
 \begin{equation}
  x = \sum_{i=1}^{n} s_i \psi_i = \textbf{s} \psi 
 \end{equation}
@@ -167,22 +179,61 @@ where $\phi$ is $m\times n$ matrix, called the \measurement matrix, and is requi
 isometry property}( RIP)( see Def. ~\ref{def:RIP} ) and also it is required to be \textit{incoherent} with the basis matrix $\psi$ 
 i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Baraniuk-CS}.
 \begin{defn}
- For RIP to hold for any matrix $\phi$, the property states that for any vector $\theta$ having the 
- same \textit{k} non-zero entries as \textit{x}
- and for any $\epsilon$>0, the following must hold,
- \begin{equation}
-  1 - \epsilon \leq \frac{\|\phi\hspace{0.1in}\theta\|_2}{\|\theta\|_2} \leq 1 + \epsilon
+ For $\phi$ to satisfy $2k$\textit{-restricted isometry property} ($2k$-RIP), the property states that 
+ for any two vectors $x_1$ and $x_2$ and for
+ a $\delta_{2k} \in (0,1)$, the following must hold,
+  \begin{equation}
+  (1 - \delta_{2k}) \leq \frac{\|\phi x_1-\phi x_2 \|_2}{\|x_1-x_2\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
+  where \hspace{0.1in} \|x_1\|_0, \|x_2\|_0 \leq k.
  \end{equation}
+ or equivalently,
+ \begin{equation}
+  (1 - \delta_{2k}) \leq \frac{\|\phi x'\|_2}{\|\ x'\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
+  where \hspace{0.1in} x'=|x_1-x_2|.
+ \end{equation}
+ The smallest $\delta_{2k}$ for which the $2k$-RIP is satisfied is called the 
+ $2k$th RIP constant of the matrix $\phi$ \cite{Needell-CoSaMP}.
  \label{def:RIP}
   \end{defn}
+  It is evident that $x'$ will be $2k$-sparse as it is difference of two \ksparse signals.
+  The RIP property means that the distance( here $l_2$ norm )between two \ksparse vectors is preserved
+  during transformation with matrix $\phi$.
+  
  \par It has been shown that a $m \times n$ matrix $\phi$ having iid entries from a Gaussian distribution
   possesess \textit{RIP} with high probability if $m \geq c\hspace{0.1in}log(\frac{n}{k})$, 
  where \textit{c} is small constant \cite{Baraniuk-CS}.
 
 \section{Recovery Algorithms}
 Given a measurement vector \y $\in \mathbb{R}^m$, reconstructing the original \ksparse vector \x $\in \mathbb{R}^n$
-requires searching over all $\binom{n}{k}$ subspaces. As $m << n$, there can be many vectors \textit{x'} satisfying
-$\phi x'=y$, as we can have $x'=x+r$ where r belongs to null space of $\phi$.
+requires searching over all $\binom{n}{k}$ subspaces. The challenge for the recovery algorithms is to identify 
+which $k$ columns of $\phi$ span the subspace in which \y lies \cite{Dai-subspace}.
+%As $m << n$, $\phi$ is spanning only \textit{m} dimensions,
+%and the \textit{n-m} dimensions lie in its nullspace. So, there can be many vectors of the form $x'=x+r$, where $r$ belongs
+%to null space of $\phi$, satisfying $\phi x' = y$. 
+\subsection{CoSaMP}
+In this discussion, we will be focussing on the \textit{Greedy Pursuit} algorithms, that tries to solve the problem
+by acheiving the best performance for the particular instant with the hope that it will give an overall best performance.
+On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \textit{Compressive Sampling
+Matching Pursuit} algorithm or commonly known as \cosamp.
+
+\subsubsection{Notation}
+Before giving the mathematical background of \cosamp, certain notations have to be introduced.
+\begin{enumerate}
+  \item For $x \in \mathbb{R}^n$ and $k$ a positive integer, $x_k$ implies retaining only the $k$ largest
+values of \x and setting the rest equal to zero.
+  
+  \item For the set $T \subseteq {1,2,...n}$, $\phi_T$ refers to the column submatrix of $\phi$ where columns
+  are chosen as per the values in set $T$.
+  
+  \item Pseudo-inverse of a matrix $A$ is defined as, 
+  \item For $T \subseteq {1,2,...n}$,
+  \begin{equation}
+   x|_T = {x_i| i \in T}
+  \end{equation}
+
+\end{enumerate}
+
+
 %Discuss CoSaMP and DGS
 \section{Verification of Recovery Algorithms through Simulation}
 \section{Conclusion}
