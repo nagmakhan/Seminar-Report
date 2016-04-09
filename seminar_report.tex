@@ -27,6 +27,7 @@
 \usepackage{algorithmicx}
 \usepackage{subcaption}
 \usepackage{algpseudocode}
+
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \theoremstyle{definition}
@@ -109,7 +110,13 @@ Indian Institute of Technology, Bombay\\
 \end{titlepage}
 
 \begin{abstract}
-The abstract goes here.
+Internet of Things is the emerging technology of this era and involves quite a lot of data which is being 
+sensed and transmitted over the Internet.
+In most cases the sensed data is sparse, so we need efficient sampling techniques which exploits this property
+and samples and transmits much less data i.e. if $x \in \mathbb{R}^n$ is
+the quantity being originally sampled then sample $y \in \mathbb{R}^m$ where $m << n$. 
+Also efficient reconstruction
+algorithms are needed that reconstruct the original quantity with small error at the receiver's end.
 \end{abstract}
 \section{Introduction}
   \subsection{Internet of Things}
@@ -126,22 +133,26 @@ The abstract goes here.
   to the support which enables the devices in the system to exchange and process data inspite of their heterogeniety 
    %\cite{Whitmore-survey}
    and Architecture provides the specifications so that information transfer and processing
-   and networking of devices can be done in a standard fashion  \cite{Whitmore-survey} \cite{Gubbi-vision}.
-  \par In healthcare applications, IoT can be used to monitor a patient's health condtion over the Internet, and 
-  in case of critical patients the sensors placed on the patient can transmit and make information available continuously
-  to the doctors and patient's relatives which will lead to better monitoring and enable doctors to take timely action
-  in case of emergencies. IoT has already made its mark in making 'smart homes' where sensors and actuators placed in 
-  the house or building complex continuously monitor and control the resource consumption and also fulfil security needs.
-  On a broader scale, IoT can be deployed to make 'smart cities' in which everything starting from traffic to the levels 
-  of pollution can be monitored and controlled \cite{Whitmore-survey}. 
-  \par Even in the industries IoT can be used for quality management, improving efficiency and tracking of goods. 
-  In can be used in hazardous industries, say the mining industry, to improve the safety level
-  by monitoring the condition inside the mine via sensors and continuously process the data to provide better disaster
-  management and in-time warning systems. In transportation and logistics, the monitoring of movement of goods, say 
-  using Radio Frequency Identification( RFID ) can be 
-  made 'real-time' using IoT and thus providing better tracking \cite{Gubbi-vision}.
-  \par These are just some examples of how IoT has affeced, is affecting and will affect our lives but one thing is clear
-  that in the coming years IoT will lead to further betterment  in our lives through saving our time, money and resources.
+   and networking of devices can be done in a standard fashion.
+   \par IoT has made its mark in healthcare by providing remote monitoring of patients health, in industries 
+   by providing efficient tracking of goods, in 'smart homes' by monitoring and controlling resource consumption.
+   And it holds the promise of 'smart cities' where pollution level to traffic will be monitored and controlled
+   \cite{Whitmore-survey} \cite{Gubbi-vision}.
+%   \par In healthcare applications, IoT can be used to monitor a patient's health condtion over the Internet, and 
+%   in case of critical patients the sensors placed on the patient can transmit and make information available continuously
+%   to the doctors and patient's relatives which will lead to better monitoring and enable doctors to take timely action
+%   in case of emergencies. IoT has already made its mark in making 'smart homes' where sensors and actuators placed in 
+%   the house or building complex continuously monitor and control the resource consumption and also fulfil security needs.
+%   On a broader scale, IoT can be deployed to make 'smart cities' in which everything starting from traffic to the levels 
+%   of pollution can be monitored and controlled \cite{Whitmore-survey}. 
+%   \par Even in the industries IoT can be used for quality management, improving efficiency and tracking of goods. 
+%   In can be used in hazardous industries, say the mining industry, to improve the safety level
+%   by monitoring the condition inside the mine via sensors and continuously process the data to provide better disaster
+%   management and in-time warning systems. In transportation and logistics, the monitoring of movement of goods, say 
+%   using Radio Frequency Identification( RFID ) can be 
+%   made 'real-time' using IoT and thus providing better tracking \cite{Gubbi-vision}.
+%   \par These are just some examples of how IoT has affeced, is affecting and will affect our lives but one thing is clear
+%   that in the coming years IoT will lead to further betterment  in our lives through saving our time, money and resources.
   \subsection{Compressed Sensing}
   With increase in the number of connected devices around us, the amount of data transmitted over the Internet will naturally
   increase. Also with increase in the number of sensors, large amounts of data will be generated which will have to be 
@@ -153,43 +164,50 @@ The abstract goes here.
   This opens up a world of possibilities as it leads to saving time and resources and thus data transmission can be done
   much faster. The only prerequisite is that the data has to \textit{sparse} or \textit{compressible}
   in some transform domain. These concepts
-  are defined mathematically in the next section, but here an example is presented to give a flavour of Compressed Sensing.
-  Say we want to measure temperature at every point in a large room and for that purpose say we deploy 100 sensors distributed
-  uniformly across the room. Now we know that temperature is a slowly varying quantity and thus will have mainly low
-  frequency components. So if we take the Fourier Transform of the data then we can ignore the higher frequency coefficients
-  and thus the measurements are compressible in Fourier Transform domain.
- 
+  are defined mathematically in the next section.
+%   but here an example is presented to give a flavour of Compressed Sensing.
+%   Say we want to measure temperature at every point in a large room and for that purpose say we deploy 100 sensors distributed
+%   uniformly across the room. Now we know that temperature is a slowly varying quantity and thus will have mainly low
+%   frequency components. So if we take the Fourier Transform of the data then we can ignore the higher frequency coefficients
+%   and thus the measurements are compressible in Fourier Transform domain.
+%  
 \section{Mathematical Background to Compressed Sensing}
-\begin{defn}
+% \begin{defn}
+%  A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} 
+%  non-zero coefficients in \textit{x}.
+% \end{defn}
+% 
+% \begin{defn}
+%  A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
+%  \textit{k}-term \sparse approximation \textit{z} i.e. $\sigma_k$ is small where \cite{CS_book},
+%  \begin{equation}
+% %  \sigma_k = \inf_{\norm{z_0}_0 \leq k}
+% \sigma_k = \inf_{\|z_0\|_0 \leq k} \| x - z \|_p
+% \end{equation}
+% \end{defn}
  A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{k-sparse} if there are \textit{k} 
- non-zero coefficients in \textit{x}.
-\end{defn}
-
-\begin{defn}
- A vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
- \textit{k}-term \sparse approximation \textit{z} i.e. $\sigma_k$ is small where \cite{CS_book},
- \begin{equation}
-%  \sigma_k = \inf_{\norm{z_0}_0 \leq k}
-\sigma_k = \inf_{\|z_0\|_0 \leq k} \| x - z \|_p
-\end{equation}
-\end{defn}
-
-\begin{defn}
- Support of a sparse vector \x i.e. $supp(x)$ is defined as,
- \begin{equation}
-  supp(x) = \{i | x(i) \neq 0 \}
- \end{equation}
- Note that for \ksparse signals $\| supp(x) \|_0 \leq k$.
-\end{defn}
+ non-zero coefficients in \textit{x}. 
+ And the vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
+\textit{k}-term \sparse approximation \textit{z} and approximation error is small. Also
+\textit{support} of a vector \x i.e.i.e. $supp(x)$ is defined as the set of indices for which the value of \x is
+non-zero \cite{CS_book}.
+% \begin{defn}
+%  Support of a sparse vector \x i.e. $supp(x)$ is defined as,
+%  \begin{equation}
+%   supp(x) = \{i | x(i) \neq 0 \}
+%  \end{equation}
+%  Note that for \ksparse signals $\| supp(x) \|_0 \leq k$.
+% \end{defn}
 
 In this discussion we are assuming that \textit{x} is \sparse or \compressible in its original domain and no transform
-is needed. We can make this assumption without loss of generalisation because any signal in $\mathbb{R}^n$ can be 
-represented in terms on a basis matrix( assumed orthonormal ), say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
-\begin{equation}
- x = \sum_{i=1}^{n} s_i \psi_i = \textbf{s} \psi 
-\end{equation}
-where \textit{s} $\in \mathbb{R}^n$. So \x and \textit{s} are considered equivalent \cite{Baraniuk-CS}. Also whenever
-a vector is mentioned as \ksparse then either it actually is or it is \compressible and can be well approximated 
+is needed. We can make this assumption without loss of generality because any signal in $\mathbb{R}^n$ can be 
+represented in terms on a basis matrix( assumed orthonormal ) \cite{Baraniuk-CS}.
+%, say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
+% \begin{equation}
+%  x = \sum_{i=1}^{n} s_i \psi_i = \textbf{s} \psi 
+% \end{equation}
+% where \textit{s} $\in \mathbb{R}^n$. So \x and \textit{s} are considered equivalent \cite{Baraniuk-CS}. 
+Also whenever a vector is mentioned as \ksparse then either it actually is or it is \compressible and can be well approximated 
 by its \ksparse representation.
 
 \par Now suppose \textit{x}$\in$ $\mathbb{R}^n$ is the original data measured by the sensors and 
@@ -198,27 +216,29 @@ is known to be \ksparse then we don't measure \x directly but instead measure \y
  y = \phi x
 \end{equation}
 where $\phi$ is $m\times n$ matrix, called the \measurement matrix, and is required to satisfy the \textit{restricted
-isometry property}( RIP)( see Def. ~\ref{def:RIP} ) and also it is required to be \textit{incoherent} with the basis matrix $\psi$ 
+isometry property}( RIP) \cite{Needell-CoSaMP}
+%( see Def. ~\ref{def:RIP} ) 
+and also it is required to be \textit{incoherent} with the basis matrix $\psi$ 
 i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Baraniuk-CS}.
-\begin{defn}
- For $\phi$ to satisfy $2k$\textit{-restricted isometry property} ($2k$-RIP), the property states that 
- for any two vectors $x_1$ and $x_2$ and for
- a $\delta_{2k} \in (0,1)$, the following must hold,
-  \begin{equation}
-  (1 - \delta_{2k}) \leq \frac{\|\phi x_1-\phi x_2 \|_2}{\|x_1-x_2\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
-  where \hspace{0.1in} \|x_1\|_0, \|x_2\|_0 \leq k.
- \end{equation}
- or equivalently,
- \begin{equation}
-  (1 - \delta_{2k}) \leq \frac{\|\phi x'\|_2}{\|\ x'\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
-  where \hspace{0.1in} x'=|x_1-x_2|.
- \end{equation}
- The smallest $\delta_{2k}$ for which the $2k$-RIP is satisfied is called the 
- $2k$th RIP constant of the matrix $\phi$ \cite{Needell-CoSaMP}.
- \label{def:RIP}
-  \end{defn}
-  It is evident that $x'$ will be $2k$-sparse as it is difference of two \ksparse signals.
-  The RIP property means that the distance( here $l_2$ norm )between two \ksparse vectors is preserved
+% \begin{defn}
+%  For $\phi$ to satisfy $2k$\textit{-restricted isometry property} ($2k$-RIP), the property states that 
+%  for any two vectors $x_1$ and $x_2$ and for
+%  a $\delta_{2k} \in (0,1)$, the following must hold,
+%   \begin{equation}
+%   (1 - \delta_{2k}) \leq \frac{\|\phi x_1-\phi x_2 \|_2}{\|x_1-x_2\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
+%   where \hspace{0.1in} \|x_1\|_0, \|x_2\|_0 \leq k.
+%  \end{equation}
+%  or equivalently,
+%  \begin{equation}
+%   (1 - \delta_{2k}) \leq \frac{\|\phi x'\|_2}{\|\ x'\|_2} \leq (1 + \delta_{2k}) \hspace{0.1in}
+%   where \hspace{0.1in} x'=|x_1-x_2|.
+%  \end{equation}
+%  The smallest $\delta_{2k}$ for which the $2k$-RIP is satisfied is called the 
+%  $2k$th RIP constant of the matrix $\phi$ .
+%  \label{def:RIP}
+%   \end{defn}
+%   It is evident that $x'$ will be $2k$-sparse as it is difference of two \ksparse signals.
+  Satisfying the RIP property simply means that the distance( here $l_2$ norm )between two \ksparse vectors is preserved
   during transformation with matrix $\phi$.
   
  \par It has been shown that a $m \times n$ matrix $\phi$ having iid entries from a Gaussian distribution
@@ -233,46 +253,63 @@ which $k$ columns of $\phi$ span the subspace in which \y lies \cite{Dai-subspac
 %and the \textit{n-m} dimensions lie in its nullspace. So, there can be many vectors of the form $x'=x+r$, where $r$ belongs
 %to null space of $\phi$, satisfying $\phi x' = y$. 
 \subsection{CoSaMP}
-In this discussion, we will be focussing on the \textit{Greedy Pursuit} algorithms, that tries to solve the problem
-by acheiving the best performance for the particular instant with the hope that it will give an overall best performance.
-On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \textit{Compressive Sampling
-Matching Pursuit} algorithm or commonly known as \cosamp. Number of measurements needed to for proper signal reconstruction is 
+% In this discussion, we will be focussing on the \textit{Greedy Pursuit} algorithms, that tries to solve the problem
+% by acheiving the best performance for the particular instant with the hope that it will give an overall best performance.
+% On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \textit{Compressive Sampling
+% Matching Pursuit} algorithm or commonly known as \cosamp. 
+In this discussion, one of the popular reconstruction algorithm that is \cosamp will be discussed, 
+which belongs to the class of Greedy Algorithms.
+The number of measurements needed for proper signal reconstruction is 
 $m=O(k log(\frac{n}{k}))$ \cite{Needell-CoSaMP}. 
 %no of measurements needed
 \subsubsection{Notation}
 Before giving the mathematical background of \cosamp, certain notations have to be introduced \cite{Needell-CoSaMP}.
-\begin{enumerate}
-  \item For $x \in \mathbb{R}^n$ and $k$ a positive integer, $x_k$ implies retaining only the $k$ largest
-values of \x and setting the rest equal to zero.
-  
-  \item For the set $T \subseteq {1,2,...n}$, $\phi_T$ refers to the column submatrix of $\phi$ where columns
-  are chosen as per the values in set $T$.
-  
-  \item Pseudo-inverse of a matrix $A$ is defined as, 
-  \begin{equation}
-   A^\dagger= (A^\ast A)^{-1} A^\ast
-  \end{equation}
-
-  \item For $T \subseteq {1,2,...n}$, $x|_T$ is the restriction of \x to the set $T$, i.e. 
-  \begin{equation}
+For $x \in \mathbb{R}^n$ and $k$ a positive integer, $x_k$ implies retaining only the $k$ largest
+values of \x and setting the rest equal to zero. Given the set $T \subseteq {1,2,...n}$, $\phi_T$ 
+refers to the column submatrix of $\phi$ where columns are chosen as per the values in set $T$.
+For the same set $T$, $x|_T$ is the restriction of \x to the set $T$, i.e. 
+\begin{equation}
    x|_T = 
    \begin{cases}
     x_i, & \text{if} \ i \in T\\
     0, & otherwise.
    \end{cases}
   \end{equation}
-
-\end{enumerate}
+  And pseudo-inverse of a matrix $A$ is defined as $A^\dagger= (A^\ast A)^{-1} A^\ast$.
+  
+% \begin{enumerate}
+%   \item For $x \in \mathbb{R}^n$ and $k$ a positive integer, $x_k$ implies retaining only the $k$ largest
+% values of \x and setting the rest equal to zero.
+%   
+%   \item For the set $T \subseteq {1,2,...n}$, $\phi_T$ refers to the column submatrix of $\phi$ where columns
+%   are chosen as per the values in set $T$.
+%   
+%   \item Pseudo-inverse of a matrix $A$ is defined as, 
+%   \begin{equation}
+%    A^\dagger= (A^\ast A)^{-1} A^\ast
+%   \end{equation}
+% 
+%   \item For $T \subseteq {1,2,...n}$, $x|_T$ is the restriction of \x to the set $T$, i.e. 
+%   \begin{equation}
+%    x|_T = 
+%    \begin{cases}
+%     x_i, & \text{if} \ i \in T\\
+%     0, & otherwise.
+%    \end{cases}
+%   \end{equation}
+% 
+% \end{enumerate}
 
 \subsubsection{Algorithm Description}
 \label{Sec:cosamp_algo}
-\cosamp algorithm works by forming the signal \textit{proxy} and then use it to find the support set
-which is then used to estimate the signal \x, and then \textit{residual} is calculated, which
-is the part of the signal not estimated by the current estimation, and then this \textit{residual}
-is used to calculate the signal \textit{proxy} in the next iteration.
+% \cosamp algorithm works by forming the signal \textit{proxy} and then use it to find the support set
+% which is then used to estimate the signal \x, and then \textit{residual} is calculated, which
+% is the part of the signal not estimated by the current estimation, and then this \textit{residual}
+% is used to calculate the signal \textit{proxy} in the next iteration.
 The \cosamp algorithm steps are 1)Forming the signal proxy and then pruning it to its \textit{k} largest
 components; 2)Support merger; 3) Estimation using least squares; 4)Pruning the estimate to retain only the largest
-\textit{k} entries; 5)Updating the residue.\\
+\textit{k} entries; 5)Updating the residue. Here pruning refers to restricting \x to $x_k$ and residual
+refers to the part of the signal which has not been estimated yet.\\
 The pseudo-algorithm is described in Algorithm~\ref{CoSaMP} \cite{Needell-CoSaMP}.
 
   \begin{algorithm}
@@ -345,39 +382,54 @@ pruning, the neighbours of the signal as well as the weights assigned to those n
   
   \par For test purpose, 1D measurement set having values $\pm 1$ was generated randomly with $n=512$, $k=64$ and $q=4$.
   Measurement matrix $\phi$ was generated choosing iid values from Gaussian distribution and then it was row normalized
-  to have unit magnitude, $\tau$ was taken as $2$, the neighbours of the signal generated were taken as $tau$ neighbouring
+  to have unit magnitude, $\tau$ was taken as $2$, the neighbours of the signal generated were taken as $\tau$ neighbouring
   values i.e. neighbours of $x(i)$ were $x(i-1)$ and $x(i+1)$ 
   and the weights $w$ was set as $0.5$ for all neighbours \cite{Huang-DGS}.
   \par First \cosamp was tried on it and then DGS. Results are decribed in the next section.
   \subsection{Discussion}
-  \cosamp needs $m=O(klog(\frac{n}{k}))$ for successful signal recovery, we used $m=(factor+1)k$ where
+  \cosamp needs $m=O(klog(\frac{n}{k}))$ for successful signal recovery, $m=(factor+1)k$ was used where
   $factor=log(\frac{n}{k})$ and the algorithm converged in about $6$ iterations, as per the \textit{halting critereon}
   described in Algorithm~\ref{CoSaMP}. 
-  \par Whereas the number of measurments needed for DGS were $m=factor \ k$,
-  it took about $12$ iterations to converge and the error is of the same order as in \cosamp.
-  The generated data \x versus the estimated $x_{hat}$ for \cosamp and DGS
-  and the error with \cosamp and DGS is shown in Fig.~\ref{fig:all_results}.
-  respectively.
-%   \begin{figure}[H]
-% 	\begin{center}
-% 	\includegraphics[width=\textwidth, height=3in]{data.eps}
-% 	\caption{Generated data set \x} 
-% 	\end{center}
-% 	\label{fig:dataset}
-% \end{figure}
-% \begin{figure}[H]
-% 	\begin{center}
-% 	\includegraphics[width=\textwidth, height=3in]{error_cosamp.eps}
-% 	\caption{Error between \x and $x_{hat}$ with CoSaMP} 
-% 	\end{center}
-% 	\label{fig:error_cosamp}
-% \end{figure}
-% \begin{figure}[H]
-% 	\begin{center}
-% 	\includegraphics[width=\textwidth, height=3in]{error_DGS.eps}
-% 	\caption{Error between \x and $x_{hat}$ with DGS}
-% 	\end{center}
-% 	\label{fig:error_dgs}
+  \par Whereas for DGS, the number of measurements needed for convergence were $m=factor \ k$ and
+  it took about $12$ iterations to converge. Error is of the same order as in \cosamp.
+  %The generated data \x versus the estimated $x_{hat}$ for \cosamp and DGS is 
+  The generated dataset \x is shown in Fig. ~\ref{fig:dataset} 
+  and the error with \cosamp and DGS is shown in Fig. ~\ref{fig:error_cosamp} and 
+  Fig. ~\ref{fig:error_dgs} respectively.\\
+  \begin{figure}[H]
+  \label{fig:dataset}
+	\begin{center}
+	\includegraphics[width=1.1\textwidth, height=3.5in]{data.eps}
+	\caption{Generated data set \x} 
+	\end{center}
+	
+\end{figure}
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1.1\textwidth, height=3.5in]{error_cosamp.eps}
+	\caption{Error between \x and $x_{hat}$ with CoSaMP} 
+	\end{center}
+	\label{fig:error_cosamp}
+\end{figure}
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=1.1\textwidth, height=3.5in]{error_DGS.eps}
+	\caption{Error between \x and $x_{hat}$ with DGS}
+	\end{center}
+	\label{fig:error_dgs}
+\end{figure}
+% \begin{figure}
+%   \begin{subfigure}[H]{0.5\textwidth}
+%     \includegraphics[width=\textwidth]{error_cosamp.eps}
+%     \caption{Picture 1}
+%     \label{fig:1}
+%   \end{subfigure}
+%   %
+%   \begin{subfigure}[H]{0.5\textwidth}
+%     \includegraphics[width=\textwidth]{error_DGS.eps}
+%     \caption{Picture 2}
+%     \label{fig:2}
+%   \end{subfigure}
 % \end{figure}
 % \begin{tabular}{cc}
 %   \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{data_cosamp.eps}}
@@ -386,21 +438,25 @@ pruning, the neighbours of the signal as well as the weights assigned to those n
 %   \begin{tabular}{cc}
 %   \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{error_cosamp.eps}}
 %     & \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{error_DGS.eps}} \\
-%     \caption{bcd}
+%     %\caption{bcd}
 %     \label{fig:all_results}
 % \end{tabular}
-\strut
 
-\noindent\null\hfill\includegraphics{one} \hfill
-\includegraphics{two} \hfill\null
-
-\noindent\null\hfill\includegraphics{three} \hfill
-\includegraphics{four} \hfill\null
 \par If \cosamp is used with $m < (factor+1) k$, then the algorithm doesn't converge.
 
 \section{Conclusion}
-This
+In the coming years, IoT is going to dominate all spheres of our life and so amount of data generated
+will increase even further and with that there will be a dire need for algorithms which require 
+fewer and fewer measurements and still provide signal reconstruction with small error.
 
+\par \cosamp has been around for quite a long time and works equally well for all kind of data
+sets irrespective of clustering or not. But for data with group clustering, DGS gives similar
+performance as \cosamp but with fewer number of measurements.
+
+\par DGS can be further improved to use lesser measurements and still provide proper reconstruction
+by using dynamic weights $w$, which can be obtained by solving a least squares problem \cite{Li-CS_in_IoT}.
+\par Overall, more algorithms which utilize the inherent properties of the data, 
+like group clustering in this case, need to be developed.
 
 \bibliographystyle{unsrt}%to make references appear in order of reference
 \bibliography{seminar_report}
