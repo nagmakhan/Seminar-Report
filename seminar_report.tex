@@ -24,9 +24,11 @@
 \usepackage{setspace}
 \usepackage{notoccite} %for sorting references
 \usepackage{algorithm}
-\usepackage{algorithmc}
-\usepackage{program}
+\usepackage{algorithmicx}
+%\usepackage{program}
 \usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}[section]
 \setcounter{secnumdepth}{5}
@@ -39,7 +41,8 @@
 \def\measurement{\textit{measurement}\hspace{0.1in}}
 \def\x{$x$\hspace{0.1in}}
 \def\y{$y$\hspace{0.1in}}
-\def\cosamp{\textbf{CoSaMP}\hspace{0.1in}}
+%\def\cosamp{\textbf{CoSaMP}\hspace{0.1in}}
+\def\cosamp{CoSaMP\hspace{0.1in}}
 \makeatletter
 
 \linespread{2}
@@ -159,9 +162,9 @@ The abstract goes here.
 \begin{defn}
  Support of a sparse vector \x i.e. $supp(x)$ is defined as,
  \begin{equation}
-  supp(x)=\{i|x(i) \neq 0\}
+  supp(x) = \{i | x(i) \neq 0 \}
  \end{equation}
- Note that for \ksparse signals $\|supp(x)\|_0 \leq k$.
+ Note that for \ksparse signals $\| supp(x) \|_0 \leq k$.
 \end{defn}
 
 In this discussion we are assuming that \textit{x} is \sparse or \compressible in its original domain and no transform
@@ -218,8 +221,9 @@ which $k$ columns of $\phi$ span the subspace in which \y lies \cite{Dai-subspac
 In this discussion, we will be focussing on the \textit{Greedy Pursuit} algorithms, that tries to solve the problem
 by acheiving the best performance for the particular instant with the hope that it will give an overall best performance.
 On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \textit{Compressive Sampling
-Matching Pursuit} algorithm or commonly known as \cosamp.
-
+Matching Pursuit} algorithm or commonly known as \cosamp. Number of measurements needed to for proper signal reconstruction is 
+$m=O(k log(\frac{n}{k}))$ \cite{Needell-CoSaMP}. 
+%no of measurements needed
 \subsubsection{Notation}
 Before giving the mathematical background of \cosamp, certain notations have to be introduced \cite{Needell-CoSaMP}.
 \begin{enumerate}
@@ -246,48 +250,94 @@ values of \x and setting the rest equal to zero.
 \end{enumerate}
 
 \subsubsection{Algorithm Description}
-The \cosamp algorithm is described as below:
-\begin{enumerate}
- \item \textbf{Initialisation}:
- \begin{eqnarray}
-  x^0 = 0 \\
-  y_r = y \\
-  i = 0 \\
- \end{eqnarray}
-  where $x^i$ holds the approximation to \x at the \textit{i}-th iteration and $y_r$ is the \textit{residual}.
-  
-  \item Repeat these steps until \textbf{halting critereon} is true.
-  \begin{enumerate}
-   \item Form a proxy of \textit{residual} and then make it $2k$\sparse.
-   \begin{eqnarray}
-    x_{temp} = \phi^\ast y_r = \phi^\ast \phi x \\
-    \Omega = supp(x_{temp \ 2k})
-   \end{eqnarray}
-   
-  \item Merge supports $\Omega$ and supp($x^{i-1}$) for the \textit{i}-th iteration
-  \begin{equation}
-   T = \Omega \cup supp(x^{i-1})
-  \end{equation}
+\label{Sec:cosamp_algo}
+\cosamp algorithm works by forming the signal \textit{proxy} and then use it to find the support set
+which is then used to estimate the signal \x, and then \textit{residual} is calculated, which
+is the part of the signal not estimated by the current estimation, and then this \textit{residual}
+is used to calculate the signal \textit{proxy} in the next iteration.
+The \cosamp algorithm steps are 1)Forming the signal proxy and then pruning it to its \textit{k} largest
+components; 2)Support merger; 3) Estimation using least squares; 4)Pruning the estimate to retain only the largest
+\textit{k} entries; 5)Updating the residue.\\
+The pseudo-algorithm is described in Algorithm~\ref{CoSaMP} \cite{Needell-CoSaMP}.
 
-  \item Solve a least squares problem to estimate \x, on the merged support.
-  
-  \end{enumerate}
-  
-\end{enumerate}
+  \begin{algorithm}
+   \caption{CoSaMP algorithm}
+   \label{CoSaMP}
+   \begin{algorithmic}
+    \Require{$\phi \in \mathbb{R}^{n \times m}$( measurement matrix ), 
+    $y \in \mathbb{R}^m$( measurements ),\\ $k$( sparsity number )}\\
+    \Ensure{$x \in \mathbb{R}^n$(recovered signal)}\\
+    \State $x^0 \gets 0$
+    \Comment{Initialisation}
+    \State $y_r \gets y$
+    \State $i \gets 0$\\
+    \Repeat
+    \State $i \gets i+1$
+    \State $x_{temp} \gets \phi^\ast y_r$
+    \Comment{Forming signal proxy}
+    \State $\Omega \gets supp(x_{temp \ 2k})$
+    \Comment{Restricting the proxy to its 2k largest component}
+    \State $T \gets \Omega \cup supp(x^{i-1})$
+    \Comment{Support Merger}
+    \State $b|_T \gets \phi_T^\dagger y$
+    \Comment{Estimating signal using least squares on the merged support set}
+    \State $x^i \gets b_k$
+    \State $y_r \gets y - \phi x^k$
+    \Comment{Calculating residual}
+    \Until $x^{i} - x^{i-1} \leq \epsilon$ 
+    \Comment{For some small $\epsilon$}\\
+    \Return $x = \phi^\dagger y$
+    \Comment{Returning the best estimate when the algorithm converges}
+   \end{algorithmic}
+\end{algorithm}
 
-%Discuss DGS
+\subsection{Dynamic Group Sparsity}
+It might happen in certain cases that the $k$ nonzero coefficients of \x are not randomly distributed but clustered
+into some groups, but this grouping keeps on changing and thus is called \textit{Dynamic Group Sparsity} or DGS.
+\begin{defn}
+ A vector $x \in \mathbb{R}^n$ is defined as \textit{dynamic group sparse} where \x is either \ksparse or can be well approximated
+ by its \ksparse approximation and the \textit{k} non-zero coefficients of \x are grouped into $q \in \{1,2,...k\}$ groups.
+\end{defn}
+In DGS, we don't need to search over all $\binom{n}{k}$ subspaces, so the number of measurements required decreases to 
+$m=O(k+q log(\frac{n}{q}))$ \cite{Huang-DGS} \cite{Li-CS_in_IoT}.
+This is quite an improvement compared to \cosamp.
+
+\par The DGS algorithm is similar to \cosamp algorithm  described in Section~\ref{Sec:cosamp_algo},
+except steps 1 and 4. In DGS, pruning is done by using
+DGS approximation pruning which is described in Algorithm~\ref{DGS_approx} \cite{Huang-DGS}.
+  \begin{algorithm}
+   \caption{DGS approximation algorithm}
+   \label{DGS_approx}
+   \begin{algorithmic}
+    \Require{$x \in \mathbb{R}^n$( vector to be pruned ), $k$( sparsity number ), 
+    $\tau$( no. of neighbours of \x ), $N_x \in \mathbb{R}^{n \times \tau}$( values of $x$'s neighbours ),
+    $w \in \mathbb{R}^{n \times \tau}$( weights assigned to neighbours ).}\\
+    \Ensure{$supp(x,k)$( Support set of pruned signal )}\\
+    \For{$i=1,..,n$}
+    \State $z(i) = x^2(i) + \sum^{\tau}_{t=1} w^2(i,t) N_{x}^{2}(i,t)$\\
+    \Comment{Calculating total contribution of a value and it's neighbours}
+    \EndFor \\
+    \State $\Omega \in \mathbb{R}^n \gets z_k$
+    \Comment{Pruning $z$ to it's $k$ largest components}\\
+    \Return $supp(x,k) \gets \Omega$
+   \end{algorithmic}
+\end{algorithm}
 \section{Verification of Recovery Algorithms through Simulation}
+  \subsection{Implementation}
+  Both the \cosamp and DGS algorithm have been implemented for verification purpose and to understand how 
+  number of measurements affect the convergence of algorithm and the amount of error.
+  
+  \par For test purpose, 1D measurement set having values $\pm 1$ was generated randomly with $n=512$, $k=64$ and $q=4$.
+  Measurement matrix $\phi$ was generated choosing iid values from Gaussian distribution and then it was row normalized
+  to have unit magnitude, $\tau$ was taken as $2$ and the weights $w$ was set as $0.5$ for all neighbours \cite{Huang-DGS}.
+  First \cosamp was tried on it and then DGS. Results are decribed in the next section.
+  \subsection{Discussion}
+  
 \section{Conclusion}
-The conclusion goes here.
-
-The authors would like to thank...\cite{Whitmore-survey} \cite{Huang-DGS}
-
-
+% %discuss future work
 
 \bibliographystyle{unsrt}%to make references appear in order of reference
 \bibliography{seminar_report}
 
 
 \end{document}
-
-
