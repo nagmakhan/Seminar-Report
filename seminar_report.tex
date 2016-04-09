@@ -25,7 +25,7 @@
 \usepackage{notoccite} %for sorting references
 \usepackage{algorithm}
 \usepackage{algorithmicx}
-%\usepackage{program}
+\usepackage{subcaption}
 \usepackage{algpseudocode}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -43,8 +43,23 @@
 \def\y{$y$\hspace{0.1in}}
 %\def\cosamp{\textbf{CoSaMP}\hspace{0.1in}}
 \def\cosamp{CoSaMP\hspace{0.1in}}
-\makeatletter
 
+\newcounter{eqn}
+\renewcommand*{\theeqn}{\alph{eqn})}
+\newcommand{\num}{\refstepcounter{eqn}\text{\theeqn}\;}
+\makeatletter
+%for figure grid
+\newcommand{\putindeepbox}[2][0.7\baselineskip]{{%
+    \setbox0=\hbox{#2}%
+    \setbox0=\vbox{\noindent\hsize=\wd0\unhbox0}
+    \@tempdima=\dp0
+    \advance\@tempdima by \ht0
+    \advance\@tempdima by -#1\relax
+    \dp0=\@tempdima
+    \ht0=#1\relax
+    \box0
+}}
+\makeatother
 \linespread{2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
 \newcommand{\LyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\spacefactor1000}
@@ -269,11 +284,11 @@ The pseudo-algorithm is described in Algorithm~\ref{CoSaMP} \cite{Needell-CoSaMP
     \Ensure{$x \in \mathbb{R}^n$(recovered signal)}\\
     \State $x^0 \gets 0$
     \Comment{Initialisation}
-    \State $y_r \gets y$
+    \State $y^r \gets y$
     \State $i \gets 0$\\
     \Repeat
     \State $i \gets i+1$
-    \State $x_{temp} \gets \phi^\ast y_r$
+    \State $x^{temp} \gets \phi^\ast y^r$
     \Comment{Forming signal proxy}
     \State $\Omega \gets supp(x_{temp \ 2k})$
     \Comment{Restricting the proxy to its 2k largest component}
@@ -282,7 +297,7 @@ The pseudo-algorithm is described in Algorithm~\ref{CoSaMP} \cite{Needell-CoSaMP
     \State $b|_T \gets \phi_T^\dagger y$
     \Comment{Estimating signal using least squares on the merged support set}
     \State $x^i \gets b_k$
-    \State $y_r \gets y - \phi x^k$
+    \State $y^r \gets y - \phi x^k$
     \Comment{Calculating residual}
     \Until $x^{i} - x^{i-1} \leq \epsilon$ 
     \Comment{For some small $\epsilon$}\\
@@ -304,7 +319,8 @@ This is quite an improvement compared to \cosamp.
 
 \par The DGS algorithm is similar to \cosamp algorithm  described in Section~\ref{Sec:cosamp_algo},
 except steps 1 and 4. In DGS, pruning is done by using
-DGS approximation pruning which is described in Algorithm~\ref{DGS_approx} \cite{Huang-DGS}.
+DGS approximation pruning which is described in Algorithm~\ref{DGS_approx} \cite{Huang-DGS}. For DGS approximation
+pruning, the neighbours of the signal as well as the weights assigned to those neighbours needs to be specified.
   \begin{algorithm}
    \caption{DGS approximation algorithm}
    \label{DGS_approx}
@@ -329,12 +345,62 @@ DGS approximation pruning which is described in Algorithm~\ref{DGS_approx} \cite
   
   \par For test purpose, 1D measurement set having values $\pm 1$ was generated randomly with $n=512$, $k=64$ and $q=4$.
   Measurement matrix $\phi$ was generated choosing iid values from Gaussian distribution and then it was row normalized
-  to have unit magnitude, $\tau$ was taken as $2$ and the weights $w$ was set as $0.5$ for all neighbours \cite{Huang-DGS}.
-  First \cosamp was tried on it and then DGS. Results are decribed in the next section.
+  to have unit magnitude, $\tau$ was taken as $2$, the neighbours of the signal generated were taken as $tau$ neighbouring
+  values i.e. neighbours of $x(i)$ were $x(i-1)$ and $x(i+1)$ 
+  and the weights $w$ was set as $0.5$ for all neighbours \cite{Huang-DGS}.
+  \par First \cosamp was tried on it and then DGS. Results are decribed in the next section.
   \subsection{Discussion}
-  
+  \cosamp needs $m=O(klog(\frac{n}{k}))$ for successful signal recovery, we used $m=(factor+1)k$ where
+  $factor=log(\frac{n}{k})$ and the algorithm converged in about $6$ iterations, as per the \textit{halting critereon}
+  described in Algorithm~\ref{CoSaMP}. 
+  \par Whereas the number of measurments needed for DGS were $m=factor \ k$,
+  it took about $12$ iterations to converge and the error is of the same order as in \cosamp.
+  The generated data \x versus the estimated $x_{hat}$ for \cosamp and DGS
+  and the error with \cosamp and DGS is shown in Fig.~\ref{fig:all_results}.
+  respectively.
+%   \begin{figure}[H]
+% 	\begin{center}
+% 	\includegraphics[width=\textwidth, height=3in]{data.eps}
+% 	\caption{Generated data set \x} 
+% 	\end{center}
+% 	\label{fig:dataset}
+% \end{figure}
+% \begin{figure}[H]
+% 	\begin{center}
+% 	\includegraphics[width=\textwidth, height=3in]{error_cosamp.eps}
+% 	\caption{Error between \x and $x_{hat}$ with CoSaMP} 
+% 	\end{center}
+% 	\label{fig:error_cosamp}
+% \end{figure}
+% \begin{figure}[H]
+% 	\begin{center}
+% 	\includegraphics[width=\textwidth, height=3in]{error_DGS.eps}
+% 	\caption{Error between \x and $x_{hat}$ with DGS}
+% 	\end{center}
+% 	\label{fig:error_dgs}
+% \end{figure}
+% \begin{tabular}{cc}
+%   \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{data_cosamp.eps}}
+%     & \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{data_DGS.eps}}
+%   \end{tabular}
+%   \begin{tabular}{cc}
+%   \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{error_cosamp.eps}}
+%     & \num\putindeepbox[7pt]{\includegraphics[width=0.5\textwidth, height=2.5in]{error_DGS.eps}} \\
+%     \caption{bcd}
+%     \label{fig:all_results}
+% \end{tabular}
+\strut
+
+\noindent\null\hfill\includegraphics{one} \hfill
+\includegraphics{two} \hfill\null
+
+\noindent\null\hfill\includegraphics{three} \hfill
+\includegraphics{four} \hfill\null
+\par If \cosamp is used with $m < (factor+1) k$, then the algorithm doesn't converge.
+
 \section{Conclusion}
-% %discuss future work
+This
+
 
 \bibliographystyle{unsrt}%to make references appear in order of reference
 \bibliography{seminar_report}
