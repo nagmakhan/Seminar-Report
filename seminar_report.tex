@@ -111,55 +111,57 @@ Indian Institute of Technology, Bombay\\
 
 \begin{abstract}
 Internet of Things is the emerging technology of this era and involves quite a lot of data which is being 
-sensed and transmitted over the Internet.
+sensed and transmitted over the internet.
 In most cases the sensed data is sparse, so we need efficient sampling techniques which exploits this property
 and samples and transmits much less data i.e. if $x \in \mathbb{R}^n$ is
 the quantity being originally sampled then sample $y \in \mathbb{R}^m$ where $m << n$. 
 Also efficient reconstruction
-algorithms are needed that reconstruct the original quantity with small error at the receiver's end.
+algorithms are needed to reconstruct the original quantity with small error at the receiver's end.
 \end{abstract}
 \section{Introduction}
   \subsection{Internet of Things}
-  Internet of Things or commonly referred to as IoT defines a paradigm in which 'everyday' devices can be connected 
-  together in a network and thus can communicate with each other over the Internet. Moreover the connected devices are equipped 
-  with 'identifying', 'sensing' and 'processing' \cite{Whitmore-survey}
+  Internet of Things or commonly referred to as IoT defines a paradigm in which `everyday' devices can be connected 
+  together in a network and thus can communicate with each other over the internet. Moreover the connected devices are equipped 
+  with `identifying', `sensing' and `processing' \cite{Whitmore-survey}
   capabilites which enable them to 
-  acheive some objective or complete some assigned task. Nowadays IoT is widely used in applications like
+  achieve some objective or complete some assigned task. Nowadays IoT is widely used in applications like
   healthcare, utilities, transport, etc. The revolution in the field of IoT has enabled
   these devices to have interaction capabilites too i.e. they can be controlled, actuated and commanded.
   \cite{Gubbi-vision}. 
   \par The components of IoT broadly are Hardware, Software and Architecture. Hardware refers to the component/s
-  or the device/s which constitue the system which has been designed to acheive some objective, Software refers roughly
+  or the device/s which constitue the system which has been designed to achieve some objective, Software refers roughly
   to the support which enables the devices in the system to exchange and process data inspite of their heterogeniety 
    %\cite{Whitmore-survey}
    and Architecture provides the specifications so that information transfer and processing
-   and networking of devices can be done in a standard fashion.
+   as well as networking of devices can be done in a standard fashion.
    \par IoT has made its mark in healthcare by providing remote monitoring of patients health, in industries 
-   by providing efficient tracking of goods, in 'smart homes' by monitoring and controlling resource consumption.
-   And it holds the promise of 'smart cities' where pollution level to traffic will be monitored and controlled
+   by providing efficient tracking of goods, in `smart homes' by monitoring and controlling resource consumption.
+   And it holds the promise of `smart cities' where pollution level to traffic will be monitored and controlled
    \cite{Whitmore-survey} \cite{Gubbi-vision}.
-%   \par In healthcare applications, IoT can be used to monitor a patient's health condtion over the Internet, and 
+%   \par In healthcare applications, IoT can be used to monitor a patient's health condtion over the internet, and 
 %   in case of critical patients the sensors placed on the patient can transmit and make information available continuously
 %   to the doctors and patient's relatives which will lead to better monitoring and enable doctors to take timely action
-%   in case of emergencies. IoT has already made its mark in making 'smart homes' where sensors and actuators placed in 
+%   in case of emergencies. IoT has already made its mark in making `smart homes' where sensors and actuators placed in 
 %   the house or building complex continuously monitor and control the resource consumption and also fulfil security needs.
-%   On a broader scale, IoT can be deployed to make 'smart cities' in which everything starting from traffic to the levels 
+%   On a broader scale, IoT can be deployed to make `smart cities' in which everything starting from traffic to the levels 
 %   of pollution can be monitored and controlled \cite{Whitmore-survey}. 
 %   \par Even in the industries IoT can be used for quality management, improving efficiency and tracking of goods. 
 %   In can be used in hazardous industries, say the mining industry, to improve the safety level
 %   by monitoring the condition inside the mine via sensors and continuously process the data to provide better disaster
 %   management and in-time warning systems. In transportation and logistics, the monitoring of movement of goods, say 
 %   using Radio Frequency Identification( RFID ) can be 
-%   made 'real-time' using IoT and thus providing better tracking \cite{Gubbi-vision}.
+%   made `real-time' using IoT and thus providing better tracking \cite{Gubbi-vision}.
 %   \par These are just some examples of how IoT has affeced, is affecting and will affect our lives but one thing is clear
 %   that in the coming years IoT will lead to further betterment  in our lives through saving our time, money and resources.
   \subsection{Compressed Sensing}
-  With increase in the number of connected devices around us, the amount of data transmitted over the Internet will naturally
+  With increase in the number of connected devices around us, the amount of data transmitted over the internet will naturally
   increase. Also with increase in the number of sensors, large amounts of data will be generated which will have to be 
-  processed, stored and transmitted over the Internet in a timely fashion. So consumption of resources by the entire system
+  processed, stored and transmitted over the internet in a timely fashion. So consumption of resources by the entire system
   will increase. This is where Compressed or Compressive Sensing comes in. 
-  \par The simplest way to define Compressed Sensing is that we measure and transmit much less information i.e, \y 
-  compared to what would have been actually measured by the sensors i.e, say \x and also \x can be reconstructed with a 
+  \par The simplest way to define Compressed Sensing is that we measure and transmit much less information
+  compared to what would have been actually measured by the sensors 
+  %i.e. say \x and also \x
+  and that can also be reconstructed with a 
   small error at the receiver's end.
   This opens up a world of possibilities as it leads to saving time and resources and thus data transmission can be done
   much faster. The only prerequisite is that the data has to \textit{sparse} or \textit{compressible}
@@ -189,7 +191,7 @@ algorithms are needed that reconstruct the original quantity with small error at
  non-zero coefficients in \textit{x}. 
  And the vector \textit{x} $\in$ $\mathbb{R}^n$ is said to be \textit{compressible} if it is well-approximated by its
 \textit{k}-term \sparse approximation \textit{z} and approximation error is small. Also
-\textit{support} of a vector \x i.e.i.e. $supp(x)$ is defined as the set of indices for which the value of \x is
+\textit{support} of a vector \x i.e. $supp(x)$ is defined as the set of indices for which the value of \x is
 non-zero \cite{CS_book}.
 % \begin{defn}
 %  Support of a sparse vector \x i.e. $supp(x)$ is defined as,
@@ -201,7 +203,7 @@ non-zero \cite{CS_book}.
 
 In this discussion we are assuming that \textit{x} is \sparse or \compressible in its original domain and no transform
 is needed. We can make this assumption without loss of generality because any signal in $\mathbb{R}^n$ can be 
-represented in terms on a basis matrix( assumed orthonormal ) \cite{Baraniuk-CS}.
+represented in terms on a basis matrix (assumed orthonormal) \cite{Baraniuk-CS}.
 %, say $\psi$ where $\psi_i$ vectors are its columns, so \x can be written as,
 % \begin{equation}
 %  x = \sum_{i=1}^{n} s_i \psi_i = \textbf{s} \psi 
@@ -219,7 +221,7 @@ where $\phi$ is $m\times n$ matrix, called the \measurement matrix, and is requi
 isometry property}( RIP) \cite{Needell-CoSaMP}
 %( see Def. ~\ref{def:RIP} ) 
 and also it is required to be \textit{incoherent} with the basis matrix $\psi$ 
-i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Baraniuk-CS}.
+i.e. the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Baraniuk-CS}.
 % \begin{defn}
 %  For $\phi$ to satisfy $2k$\textit{-restricted isometry property} ($2k$-RIP), the property states that 
 %  for any two vectors $x_1$ and $x_2$ and for
@@ -238,7 +240,7 @@ i.e, the rows of $\phi$ cannot sparsely represent the columns of $\psi$ \cite{Ba
 %  \label{def:RIP}
 %   \end{defn}
 %   It is evident that $x'$ will be $2k$-sparse as it is difference of two \ksparse signals.
-  Satisfying the RIP property simply means that the distance( here $l_2$ norm )between two \ksparse vectors is preserved
+  Satisfying the RIP property simply means that the distance (here $l_2$ norm) between two \ksparse vectors is preserved
   during transformation with matrix $\phi$.
   
  \par It has been shown that a $m \times n$ matrix $\phi$ having iid entries from a Gaussian distribution
@@ -254,7 +256,7 @@ which $k$ columns of $\phi$ span the subspace in which \y lies \cite{Dai-subspac
 %to null space of $\phi$, satisfying $\phi x' = y$. 
 \subsection{CoSaMP}
 % In this discussion, we will be focussing on the \textit{Greedy Pursuit} algorithms, that tries to solve the problem
-% by acheiving the best performance for the particular instant with the hope that it will give an overall best performance.
+% by achieving the best performance for the particular instant with the hope that it will give an overall best performance.
 % On of the popular Greedy Pursuit Recovery algorithm for Compressed Sensing is \textit{Compressive Sampling
 % Matching Pursuit} algorithm or commonly known as \cosamp. 
 In this discussion, one of the popular reconstruction algorithm that is \cosamp will be discussed, 
@@ -357,15 +359,15 @@ This is quite an improvement compared to \cosamp.
 \par The DGS algorithm is similar to \cosamp algorithm  described in Section~\ref{Sec:cosamp_algo},
 except steps 1 and 4. In DGS, pruning is done by using
 DGS approximation pruning which is described in Algorithm~\ref{DGS_approx} \cite{Huang-DGS}. For DGS approximation
-pruning, the neighbours of the signal as well as the weights assigned to those neighbours needs to be specified.
+pruning, the neighbours of the signal as well as the weights assigned to those neighbours need to be specified.
   \begin{algorithm}
    \caption{DGS approximation algorithm}
    \label{DGS_approx}
    \begin{algorithmic}
-    \Require{$x \in \mathbb{R}^n$( vector to be pruned ), $k$( sparsity number ), 
-    $\tau$( no. of neighbours of \x ), $N_x \in \mathbb{R}^{n \times \tau}$( values of $x$'s neighbours ),
-    $w \in \mathbb{R}^{n \times \tau}$( weights assigned to neighbours ).}\\
-    \Ensure{$supp(x,k)$( Support set of pruned signal )}\\
+    \Require{$x \in \mathbb{R}^n$ (vector to be pruned), $k$ (sparsity number), 
+    $\tau$ (no. of neighbours of \x), $N_x \in \mathbb{R}^{n \times \tau}$ (values of $x$'s neighbours),
+    $w \in \mathbb{R}^{n \times \tau}$ (weights assigned to neighbours).}\\
+    \Ensure{$supp(x,k)$ (Support set of pruned signal)}\\
     \For{$i=1,..,n$}
     \State $z(i) = x^2(i) + \sum^{\tau}_{t=1} w^2(i,t) N_{x}^{2}(i,t)$\\
     \Comment{Calculating total contribution of a value and it's neighbours}
@@ -393,9 +395,9 @@ pruning, the neighbours of the signal as well as the weights assigned to those n
   \par Whereas for DGS, the number of measurements needed for convergence were $m=factor \ k$ and
   it took about $12$ iterations to converge. Error is of the same order as in \cosamp.
   %The generated data \x versus the estimated $x_{hat}$ for \cosamp and DGS is 
-  The generated dataset \x is shown in Fig. ~\ref{fig:dataset} 
-  and the error with \cosamp and DGS is shown in Fig. ~\ref{fig:error_cosamp} and 
-  Fig. ~\ref{fig:error_dgs} respectively.\\
+  The generated dataset \x is shown in Fig.1
+  and the error with \cosamp and DGS is shown in Fig.2 and 
+  Fig.3 respectively.\\
   \begin{figure}[H]
   \label{fig:dataset}
 	\begin{center}
